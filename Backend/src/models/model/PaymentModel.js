@@ -1,14 +1,42 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 
-const paymentSchema = new mongoose.Schema(
-  {
-    patientId: { type: mongoose.Schema.Types.ObjectId, ref: "Patient", required: true },
-    appointmentId: { type: mongoose.Schema.Types.ObjectId, ref: "Appointment", required: true },
-    amount: { type: Number, required: true },
-    paymentMethod: { type: String, enum: ["cash", "card", "UPI"], required: true },
-    status: { type: String, enum: ["successful", "failed", "pending"], default: "pending" },
+const paymentSchema = new mongoose.Schema({
+  patientId: {
+    type: String,
+    required: true
   },
-  { timestamps: true }
-);
+  razorpayOrderId: {
+    type: String,
+    required: true,
+    unique: true
+  },
+  razorpayPaymentId: {
+    type: String,
+    unique: true,
+    sparse: true  // ✅ Allow null values initially
+  },
+  transactionId: {
+    type: String,
+    unique: true,  
+    sparse: true   // ✅ Fix duplicate key error for null values
+  },
+  amount: {
+    type: Number,
+    required: true
+  },
+  currency: {
+    type: String,
+    default: 'INR'
+  },
+  status: {
+    type: String,
+    enum: ['pending', 'paid', 'failed'],
+    default: 'pending'
+  },
+  invoiceUrl: {
+    type: String
+  }
+}, { timestamps: true });
 
-export default mongoose.model("Payment", paymentSchema);
+const Payment = mongoose.model('Payment', paymentSchema);
+export default Payment;

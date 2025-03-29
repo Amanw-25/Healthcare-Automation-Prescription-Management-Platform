@@ -4,6 +4,8 @@ import cors from "cors";
 
 // Import Routes
 import Authrouter from "./routes/authRoute.js";
+import paymentRoutes from "./routes/paymentRoutes.js";
+import patientRoutes from "./routes/patientRoutes.js";
 import appconfig from "./config/appConfig.js";
 
 export const app = express();
@@ -21,3 +23,5 @@ app.use(
 
 // API Routes
 app.use("/api/v1/hms/auth", Authrouter);
+app.use("/api/v1/hms/patients", patientRoutes);
+app.use("/api/v1/hms/payments", paymentRoutes);
